@@ -10,13 +10,16 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.logging.Level;
 
 public class Config {
 
     private Map<String, Object> values;
+    private File file;
     private FileConfiguration configuration;
     private Plugin plugin;
     private BukkitTask autosaveTask;
@@ -24,7 +27,8 @@ public class Config {
     public Config(String fileName, Plugin plugin) {
         this.values = new HashMap<>();
         this.plugin = plugin;
-        this.configuration = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder() + "/" + fileName));
+        this.file = new File(plugin.getDataFolder() + "/" + fileName);
+        this.configuration = YamlConfiguration.loadConfiguration(file);
 
     }
 
@@ -46,6 +50,13 @@ public class Config {
     public void save() {
         for (Map.Entry<String, Object> entry : values.entrySet()) {
             configuration.set(entry.getKey(), entry.getValue());
+        }
+
+        try {
+            configuration.save(file);
+        } catch (IOException e) {
+            plugin.getLogger().log(Level.SEVERE, "An issue has occurred while saving " + file.getName());
+            e.printStackTrace();
         }
     }
 
