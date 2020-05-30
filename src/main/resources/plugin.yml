@@ -1,0 +1,6 @@
+name: CachedConfig
+version: ${project.version}
+main: com.yerti.cachedconfig.cachedconfig.CachedConfig
+api-version: 1.13
+authors: [Yerti]
+description: A simple utility that helps reduce config retrieval lag and clutter by storing values on startup 
